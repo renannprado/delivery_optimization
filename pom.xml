@@ -11,4 +11,25 @@
         <module>delivery-optimization-web</module>
         <module>delivery-optimization-ejb</module>
     </modules>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.wildfly.plugins</groupId>
+                <artifactId>wildfly-maven-plugin</artifactId>
+                <version>1.0.2.Final</version>
+                <executions>
+                    <execution>
+                        <!--<id>local</id>-->
+                        <phase>install</phase> 
+                        <goals> 
+                            <goal>deploy</goal> 
+                        </goals> 
+                        <configuration>
+                            
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
