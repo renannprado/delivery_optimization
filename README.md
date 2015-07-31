@@ -2,7 +2,9 @@
 
 [![Build Status](http://build.renann.me/buildStatus/icon?job=DeliveryOptimization)](http://build.renann.me/job/DeliveryOptimization/)
 
-This README would normally document whatever steps are necessary to get your application up and running.
+This application is a test for Walmart's job selection process.
+
+This project is being continuously built and can be accessed through the following URL: http://dev.renann.me/walmart
 
 ### What is this repository for? ###
 
