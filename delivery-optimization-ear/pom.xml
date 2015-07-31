@@ -26,14 +26,10 @@
                 <version>1.0.2.Final</version>
                 <executions>
                     <execution>
-                        <id>local</id>
                         <phase>install</phase> 
                         <goals> 
                             <goal>deploy</goal> 
                         </goals> 
-                        <configuration>
-                            <port>9991</port>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
