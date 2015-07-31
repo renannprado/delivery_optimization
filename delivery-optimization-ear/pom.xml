@@ -29,7 +29,13 @@
                         <phase>install</phase> 
                         <goals> 
                             <goal>deploy</goal> 
-                        </goals> 
+                        </goals>
+                        <configuration>
+                            <hostname>${wildfly.deploy.host}</hostname>
+                            <username>${wildfly.deploy.username}</username>
+                            <password>${wildfly.deploy.password}</password>
+                        </configuration>
+ 
                     </execution>
                 </executions>
             </plugin>
