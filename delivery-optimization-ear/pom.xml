@@ -35,7 +35,6 @@
                             <username>${wildfly.deploy.username}</username>
                             <password>${wildfly.deploy.password}</password>
                         </configuration>
- 
                     </execution>
                 </executions>
             </plugin>
