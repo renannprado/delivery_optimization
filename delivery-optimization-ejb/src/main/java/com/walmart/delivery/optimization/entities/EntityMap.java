@@ -1,6 +1,7 @@
 package com.walmart.delivery.optimization.entities;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,11 +26,11 @@ public class EntityMap implements Serializable
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
     private String name;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "entityMap")
-    private Set<EntityLogisticsNetwork> logisticsNetwork;
+    private List<EntityLogisticsNetwork> logisticsNetwork;
     
     public Long getId() {
         return id;
@@ -47,11 +48,11 @@ public class EntityMap implements Serializable
         this.name = name;
     }
 
-    public Set<EntityLogisticsNetwork> getLogisticsNetwork() {
+    public List<EntityLogisticsNetwork> getLogisticsNetwork() {
         return logisticsNetwork;
     }
 
-    public void setLogisticsNetwork(Set<EntityLogisticsNetwork> logisticsNetwork) {
+    public void setLogisticsNetwork(List<EntityLogisticsNetwork> logisticsNetwork) {
         this.logisticsNetwork = logisticsNetwork;
     }
 
