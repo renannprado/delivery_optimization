@@ -1,4 +1,4 @@
-package com.walmart.delivery.optimization;
+package com.walmart.delivery.optimization.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
