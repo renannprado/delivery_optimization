@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
+import java.util.jar.Attributes;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -28,18 +30,22 @@ public class EntityLogisticsNetwork implements Serializable
     @JsonIgnore // this is used to prevent the webservice caller to be able to set the id, which would cause exceptions/errros
     private Long id;
 
-    @Column(name = "source_name")
+    @Column(name = "source_name", nullable = false)
+    @NotNull
     private String sourceName;
     
-    @Column(name = "destiny_name")
+    @Column(name = "destiny_name", nullable = false)
+    @NotNull
     private String destinyName;
 
-    @Column(name = "distance")
+    @Column(name = "distance", nullable = false)
+    @NotNull
     private Integer distance;
     
     @ManyToOne
+    @NotNull
     @JoinColumn(name = "map_id")
-    @JsonProperty(value = "map")
+    @JsonIgnore
     @JsonIgnoreProperties(value = {"name", "logisticsNetwork"}) // this will prevent the recursion, which would cause a stackoverflow, sending over just the ID is ok
     private EntityMap entityMap; 
     
@@ -77,10 +83,12 @@ public class EntityLogisticsNetwork implements Serializable
         this.distance = distance;
     }
 
+    @JsonProperty(value = "map")
     public EntityMap getEntityMap() {
         return entityMap;
     }
 
+    @JsonIgnore(true)
     public void setEntityMap(EntityMap entityMap) {
         this.entityMap = entityMap;
     }

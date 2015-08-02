@@ -13,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -29,7 +30,8 @@ public class EntityMap implements Serializable
     @JsonIgnore // this is used to prevent the webservice caller to be able to set the id, which would cause exceptions/errros
     private Long id;
     
-    @Column(name = "name", unique = true)
+    @Column(name = "name", unique = true, nullable = false)
+    @NotNull
     private String name;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "entityMap", cascade = CascadeType.ALL)
