@@ -1,9 +1,11 @@
 package com.walmart.delivery.optimization.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,6 +25,7 @@ public class EntityLogisticsNetwork implements Serializable
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonIgnore // this is used to prevent the webservice caller to be able to set the id, which would cause exceptions/errros
     private Long id;
 
     @Column(name = "source_name")
@@ -33,12 +36,16 @@ public class EntityLogisticsNetwork implements Serializable
 
     @ManyToOne
     @JoinColumn(name = "map_id")
+    @JsonProperty(value = "map")
+    @JsonIgnoreProperties(value = {"name", "logisticsNetwork"}) // this will prevent the recursion, which would cause a stackoverflow, sending over just the ID is ok
     private EntityMap entityMap; 
     
+    @JsonProperty
     public Long getId() {
         return id;
     }
 
+    @JsonIgnore(true) // the id must be ignored in the request
     public void setId(Long id) {
         this.id = id;
     }
@@ -89,6 +96,6 @@ public class EntityLogisticsNetwork implements Serializable
 
     @Override
     public String toString() {
-        return "com.walmart.delivery.optimization.entities.LogisticsNetwork[ id=" + id + " ]";
+        return "EntityLogisticsNetwork{" + "id=" + id + ", sourceName=" + sourceName + ", destinyName=" + destinyName + ", entityMap=" + entityMap + '}';
     }
 }

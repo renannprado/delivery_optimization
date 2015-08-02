@@ -1,8 +1,10 @@
 package com.walmart.delivery.optimization.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -24,18 +26,21 @@ public class EntityMap implements Serializable
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonIgnore // this is used to prevent the webservice caller to be able to set the id, which would cause exceptions/errros
     private Long id;
     
     @Column(name = "name", unique = true)
     private String name;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "entityMap")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "entityMap", cascade = CascadeType.ALL)
     private List<EntityLogisticsNetwork> logisticsNetwork;
     
+    @JsonProperty
     public Long getId() {
         return id;
     }
 
+    @JsonIgnore(true) // the id must be ignored in the request
     public void setId(Long id) {
         this.id = id;
     }
@@ -78,8 +83,6 @@ public class EntityMap implements Serializable
 
     @Override
     public String toString() {
-        return "com.walmart.delivery.optimization.entities.Map[ id=" + id + " ]";
-    }
-    
-    
+        return "EntityMap{" + "id=" + id + ", name=" + name + ", logisticsNetwork=" + logisticsNetwork + '}';
+    }    
 }
