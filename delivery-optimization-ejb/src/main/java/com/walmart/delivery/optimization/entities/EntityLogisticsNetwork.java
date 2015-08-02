@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.util.jar.Attributes;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -42,11 +43,10 @@ public class EntityLogisticsNetwork implements Serializable
     @NotNull
     private Integer distance;
     
-    @ManyToOne
+    @ManyToOne(optional = false)
     @NotNull
-    @JoinColumn(name = "map_id")
+    @JoinColumn(nullable = false, name = "map_id", referencedColumnName = "id")
     @JsonIgnore
-    @JsonIgnoreProperties(value = {"name", "logisticsNetwork"}) // this will prevent the recursion, which would cause a stackoverflow, sending over just the ID is ok
     private EntityMap entityMap; 
     
     @JsonProperty
@@ -84,6 +84,7 @@ public class EntityLogisticsNetwork implements Serializable
     }
 
     @JsonProperty(value = "map")
+    @JsonIgnoreProperties(value = {"name", "logisticsNetwork"}) // this will prevent the recursion, which would cause a stackoverflow, sending over just the ID is ok
     public EntityMap getEntityMap() {
         return entityMap;
     }
@@ -115,6 +116,6 @@ public class EntityLogisticsNetwork implements Serializable
 
     @Override
     public String toString() {
-        return "EntityLogisticsNetwork{" + "id=" + id + ", sourceName=" + sourceName + ", destinyName=" + destinyName + ", entityMap=" + entityMap + '}';
+        return "EntityLogisticsNetwork{" + "id=" + id + ", sourceName=" + sourceName + ", destinyName=" + destinyName + ", distance=" + distance + '}';
     }
 }
