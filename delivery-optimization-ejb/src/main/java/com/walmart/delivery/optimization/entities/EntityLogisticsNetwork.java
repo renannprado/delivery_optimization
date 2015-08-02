@@ -34,6 +34,9 @@ public class EntityLogisticsNetwork implements Serializable
     @Column(name = "destiny_name")
     private String destinyName;
 
+    @Column(name = "distance")
+    private Integer distance;
+    
     @ManyToOne
     @JoinColumn(name = "map_id")
     @JsonProperty(value = "map")
@@ -65,6 +68,14 @@ public class EntityLogisticsNetwork implements Serializable
     public void setDestinyName(String destinyName) {
         this.destinyName = destinyName;
     }    
+
+    public Integer getDistance() {
+        return distance;
+    }
+
+    public void setDistance(Integer distance) {
+        this.distance = distance;
+    }
 
     public EntityMap getEntityMap() {
         return entityMap;
