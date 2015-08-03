@@ -1,10 +1,30 @@
-
-<html>
+<!DOCTYPE html>
+<html lang="en" ng-app="DeliveryOptmizationApp">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Walmart - Delivery Optimization Services</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+        <link href="css/style.css" rel="stylesheet" type="text/css"/>
+        <link rel="icon" href="data:;base64,iVBORw0KGgo="> 
     </head>
     <body>
-        <h1>Welcome to the Delivery Optimization Services!</h1>
+        <h1 id="title">Welcome to the Delivery Optimization Services!</h1>
+        <div id="container">
+
+            <div id="menu">
+                <a class="btn btn-primary" href="#/addLogisticsNetwork">Add new Logistics Network</a>
+                <a class="btn btn-primary" href="#/shortestPath">Search for best route</a>
+            </div>
+            <div ng-view>
+
+            </div>
+        </div>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
+        <script type="text/javascript" src="https://code.angularjs.org/1.4.3/angular-resource.min.js"></script>
+        <script type="text/javascript" src="https://code.angularjs.org/1.4.3/angular-route.min.js"></script>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script type="text/javascript" src="js/app.js"></script>
     </body>
 </html>

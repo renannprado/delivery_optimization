@@ -1,0 +1,37 @@
+/* 
+    Created on : Aug 1, 2015, 10:01:16 PM
+    Author     : renannp
+*/
+
+#container {
+    margin: 0 auto;
+    width: 900px;
+}
+
+#title {
+    text-align: center;
+}
+
+#networkPathForm {
+    width: 50%;
+    float: left;
+}
+
+#networkPathForm input {
+    width: 90%;
+}
+
+#networkPathForm > button {
+    float: right;
+    margin-right: 45px;
+    margin-top: 10px;
+}
+
+#currentPaths {
+    float: right;
+    width: 50%;
+}
+
+#currentPaths > select {
+    width: 100%;
+}
