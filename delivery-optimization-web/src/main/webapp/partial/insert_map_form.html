@@ -1,19 +1,22 @@
-<h3>Insert Map Form</h3>
+<h3 style="text-align: center;">Register Map Form</h3>
 <form name="inserMapForm" ng-controller="InserMapController">
-    <div class="form-group" id="networkPathForm">
+    <div class="form-group">
         <label for="mapName">Map Name</label>
         <input ng-model="newMap.name" required type="text" class="form-control" id="mapName">
-        <label for="sourcePoint">Source Point Name</label>
-        <input type="text" ng-model="sourcePoint" class="form-control" id="sourcePoint">
-        <label for="destinyPoint">Destiny Point Name</label>
-        <input type="text" ng-model="destinyPoint" class="form-control" id="destinyPoint">
-        <label for="distance">Distance</label>
-        <input type="number" ng-model="distance" class="form-control" id="distance">
-        <button ng-click="addNewPath()" class="btn btn-success"><b>+</b></button>
+        <h3 style="text-align: center">Logistics Network</h3>
+        <div class="form-group" id="networkPathForm">
+            <label for="sourcePoint">Source Point Name</label>
+            <input type="text" ng-model="sourcePoint" class="form-control" id="sourcePoint">
+            <label for="destinyPoint">Destiny Point Name</label>
+            <input type="text" ng-model="destinyPoint" class="form-control" id="destinyPoint">
+            <label for="distance">Distance</label>
+            <input type="number" ng-model="distance" class="form-control" id="distance">
+            <button ng-click="addNewPath()" class="btn btn-success"><b>+</b></button>
+        </div>
     </div>
     <div id="currentPaths" class="form-group">
         <h4>Current Logistics Network:</h4><br>
-        <select disabled size="13">
+        <select disabled size="10">
             <option selected disabled hidden value=""></option>
             <option ng-repeat="path in newMap.logisticsNetwork">{{ path.sourceName + ' -----> ' + path.destinyName + ' (' + path.distance + 'km)'}}</option>-->
         </select>

@@ -44,7 +44,7 @@ deliveryOptmizationApp.controller('InserMapController', function($scope, $http){
     
     $scope.addNewPath = function(){
         if (!$scope.sourcePoint || ! $scope.destinyPoint || !$scope.distance) {
-            alert('deucerto');        
+            alert('Source Point Name, Destiny Point Name and Distance fields are required.');        
             return;
         }
         

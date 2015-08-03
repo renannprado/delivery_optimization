@@ -15,6 +15,7 @@
 #networkPathForm {
     width: 50%;
     float: left;
+    margin-top: 15px;
 }
 
 #networkPathForm input {
@@ -34,5 +35,5 @@
 
 #currentPaths > select {
     width: 100%;
-    height: 220px; /* fix for firefox */
+    height: 170px; /* fix for firefox */
 }
