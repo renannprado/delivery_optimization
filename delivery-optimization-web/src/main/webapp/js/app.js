@@ -18,7 +18,7 @@ deliveryOptmizationApp.config(function ($routeProvider, $locationProvider) {
                 });
 });
 
-deliveryOptmizationApp.controller('InserMapController', function($scope){
+deliveryOptmizationApp.controller('InserMapController', function($scope, $http){
     
     $scope.init = function() {
         $scope.newMap = {'logisticsNetwork': []};
@@ -30,6 +30,16 @@ deliveryOptmizationApp.controller('InserMapController', function($scope){
             alert('This map should have at least one source/destiny path.');
             return;
         }
+        
+        $http.put('rest/addLogisticsNetwork', $scope.newMap).then(function(response) {
+            alert('Success: ' + JSON.stringify(response.data));
+            
+            // if successfully registered the network, clean the object
+            $scope.init();
+        },
+        function(errorResponse){
+            alert('Error: ' + JSON.stringify(errorResponse));
+        });
     };
     
     $scope.addNewPath = function(){
