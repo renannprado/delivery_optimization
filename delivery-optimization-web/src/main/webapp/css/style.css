@@ -34,4 +34,5 @@
 
 #currentPaths > select {
     width: 100%;
+    height: 220px; /* fix for firefox */
 }
