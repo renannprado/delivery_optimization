@@ -15,11 +15,24 @@
         </div>
     </div>
     <div id="currentPaths" class="form-group">
-        <h4>Current Logistics Network:</h4><br>
-        <select disabled size="10">
-            <option selected disabled hidden value=""></option>
-            <option ng-repeat="path in newMap.logisticsNetwork">{{ path.sourceName + ' -----> ' + path.destinyName + ' (' + path.distance + 'km)'}}</option>-->
-        </select>
+        <div>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Source Point Name</th>
+                        <th>Destiny Point Name</th>
+                        <th>Distance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="path in newMap.logisticsNetwork">
+                        <td>{{path.sourceName}}</td>
+                        <td>{{path.destinyName}}</td>
+                        <td>{{path.distance}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>        
     </div>
     <button type="submit" ng-click="inserMapForm.$valid && registerMap()" class="btn btn-success">Save Map</button>
 </form>
