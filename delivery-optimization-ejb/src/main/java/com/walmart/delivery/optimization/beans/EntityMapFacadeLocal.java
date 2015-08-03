@@ -1,5 +1,6 @@
 package com.walmart.delivery.optimization.beans;
 
+import com.walmart.delivery.optimization.entities.EntityLogisticsNetwork;
 import com.walmart.delivery.optimization.entities.EntityMap;
 import java.util.List;
 import javax.ejb.Local;
@@ -25,4 +26,5 @@ public interface EntityMapFacadeLocal {
 
     int count();
     
+    public List<EntityLogisticsNetwork> getNetworkByMapName(String mapName);    
 }

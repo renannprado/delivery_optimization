@@ -11,6 +11,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -19,7 +21,13 @@ import javax.validation.constraints.NotNull;
  *
  * @author renannp
  */
-@Entity(name = "map")
+@NamedQueries({
+	@NamedQuery(
+            name = "Map.getLogisticsNetworkByName",
+            query = "SELECT net FROM Map AS m INNER JOIN m.logisticsNetwork as net WHERE m.name LIKE :nameParam"
+	)
+})
+@Entity(name = "Map")
 @Table(name = "tb_map")
 public class EntityMap implements Serializable 
 {
@@ -52,7 +60,7 @@ public class EntityMap implements Serializable
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = name.toUpperCase();
     }
 
     public List<EntityLogisticsNetwork> getLogisticsNetwork() {

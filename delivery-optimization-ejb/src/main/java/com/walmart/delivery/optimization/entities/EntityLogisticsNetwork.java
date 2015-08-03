@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
-import java.util.jar.Attributes;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,7 +18,7 @@ import javax.validation.constraints.NotNull;
  *
  * @author renannp
  */
-@Entity(name = "logisticsNetwork")
+@Entity(name = "LogisticsNetwork")
 @Table(name = "tb_logistics_network")
 public class EntityLogisticsNetwork implements Serializable 
 {
