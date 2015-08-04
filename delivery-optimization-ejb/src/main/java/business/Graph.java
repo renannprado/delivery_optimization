@@ -11,27 +11,27 @@ import java.util.Objects;
  */
 public class Graph 
 {   
-    public static class Node
+    public static class Vertex
     {
-        private String nodeName;
+        private String name;
 
-        public Node(String nodeName)
+        public Vertex(String nodeName)
         {
-            this.nodeName = nodeName;
+            this.name = nodeName;
         }
         
-        public String getNodeName() {
-            return nodeName;
+        public String getName() {
+            return name;
         }
 
-        public void setNodeName(String nodeName) {
-            this.nodeName = nodeName;
+        public void setName(String name) {
+            this.name = name;
         }
         
         @Override
         public int hashCode() {
             int hash = 3;
-            hash = 53 * hash + Objects.hashCode(this.nodeName);
+            hash = 53 * hash + Objects.hashCode(this.name);
             return hash;
         }
 
@@ -43,8 +43,8 @@ public class Graph
             if (getClass() != obj.getClass()) {
                 return false;
             }
-            final Node other = (Node) obj;
-            if (!Objects.equals(this.nodeName, other.nodeName)) {
+            final Vertex other = (Vertex) obj;
+            if (!Objects.equals(this.name, other.name)) {
                 return false;
             }
             return true;
@@ -52,15 +52,15 @@ public class Graph
 
         @Override
         public String toString() {
-            return "Node{" + "nodeName=" + nodeName + '}';
+            return "Node{" + "name=" + name + '}';
         }
     }
     
     public static class Edge 
     {
         private Integer distance;
-        private Node nodeFrom;
-        private Node nodeTo;
+        private Vertex vertexFrom;
+        private Vertex vertexTo;
 
         public Integer getDistance() {
             return distance;
@@ -70,20 +70,20 @@ public class Graph
             this.distance = distance;
         }
 
-        public Node getNodeFrom() {
-            return nodeFrom;
+        public Vertex getVertexFrom() {
+            return vertexFrom;
         }
 
-        public void setNodeFrom(Node nodeFrom) {
-            this.nodeFrom = nodeFrom;
+        public void setVertexFrom(Vertex vertexFrom) {
+            this.vertexFrom = vertexFrom;
         }
 
-        public Node getNodeTo() {
-            return nodeTo;
+        public Vertex getVertexTo() {
+            return vertexTo;
         }
 
-        public void setNodeTo(Node nodeTo) {
-            this.nodeTo = nodeTo;
+        public void setVertexTo(Vertex vertexTo) {
+            this.vertexTo = vertexTo;
         }
     }
     
@@ -111,8 +111,8 @@ public class Graph
         network.stream().forEach((edge) -> {
             g.addEdge(new Edge() 
             {{
-                setNodeFrom(new Node(edge.getSourceName()));
-                setNodeTo(new Node(edge.getDestinyName()));
+                setVertexFrom(new Vertex(edge.getSourceName()));
+                setVertexTo(new Vertex(edge.getDestinyName()));
                 setDistance(edge.getDistance());
             }});
         });
@@ -124,8 +124,21 @@ public class Graph
     {
         for (Edge e : this.edgeList)
         {
-            System.out.println(e.nodeFrom + " -----> " + e.nodeTo + " (" + e.distance + ")");
+            System.out.println(e.vertexFrom + " -----> " + e.vertexTo + " (" + e.distance + ")");
         }
     }
     
+    /**
+     * This method executes the Dijkstra's shortest path algorithm
+     * @param nodeFrom the name of the node where the search should start
+     * @param nodeTo the node that you want to get to 
+     * @return if there`s a shortest path to <code>vertexTo</code>, it will return a graph with the shortest path,
+     * and will return <b>empty</b> graph (no edges) if there`s no shortest path to the <code>vertexTo</code>
+     */
+    public Graph shortestPathAlgorithm(String nodeFrom, String nodeTo)
+    {
+        Graph result = new Graph();
+        
+        return null;
+    }
 }
