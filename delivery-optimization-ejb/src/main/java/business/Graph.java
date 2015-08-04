@@ -4,6 +4,7 @@ import com.walmart.delivery.optimization.entities.EntityLogisticsNetwork;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -13,19 +14,15 @@ public class Graph
 {   
     public static class Vertex
     {
-        private String name;
+        private final String name;
 
-        public Vertex(String nodeName)
+        public Vertex(String name)
         {
-            this.name = nodeName;
+            this.name = name;
         }
         
         public String getName() {
             return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
         }
         
         @Override
@@ -52,38 +49,32 @@ public class Graph
 
         @Override
         public String toString() {
-            return "Node{" + "name=" + name + '}';
+            return "Vertex{" + "name=" + name + '}';
         }
     }
     
     public static class Edge 
     {
-        private Integer distance;
-        private Vertex vertexFrom;
-        private Vertex vertexTo;
+        private final Integer distance;
+        private final Vertex vertexFrom;
+        private final Vertex vertexTo;
 
+        public Edge(Integer distance, Vertex vertexFrom, Vertex vertexTo) {
+            this.distance = distance;
+            this.vertexFrom = vertexFrom;
+            this.vertexTo = vertexTo;
+        }
+        
         public Integer getDistance() {
             return distance;
-        }
-
-        public void setDistance(Integer distance) {
-            this.distance = distance;
-        }
+        }        
 
         public Vertex getVertexFrom() {
             return vertexFrom;
         }
-
-        public void setVertexFrom(Vertex vertexFrom) {
-            this.vertexFrom = vertexFrom;
-        }
-
+        
         public Vertex getVertexTo() {
             return vertexTo;
-        }
-
-        public void setVertexTo(Vertex vertexTo) {
-            this.vertexTo = vertexTo;
         }
     }
     
@@ -99,22 +90,12 @@ public class Graph
         this.edgeList.add(n);
     }
     
-    public Graph shortestPathAgorithm(String nodeNameFrom, String nodeNameTo) 
-    {
-        return new Graph();
-    }
-    
     public static Graph buildGraphFromLogisticsNetwork(List<EntityLogisticsNetwork> network)
     {
         Graph g = new Graph();
         
-        network.stream().forEach((edge) -> {
-            g.addEdge(new Edge() 
-            {{
-                setVertexFrom(new Vertex(edge.getSourceName()));
-                setVertexTo(new Vertex(edge.getDestinyName()));
-                setDistance(edge.getDistance());
-            }});
+        network.stream().forEach((path) -> {
+            g.addEdge(new Edge(path.getDistance(), new Vertex(path.getSourceName()), new Vertex(path.getDestinyName())));
         });
         
         return g;
@@ -130,14 +111,18 @@ public class Graph
     
     /**
      * This method executes the Dijkstra's shortest path algorithm
-     * @param nodeFrom the name of the node where the search should start
-     * @param nodeTo the node that you want to get to 
+     * @param vertexFrom the name of the vertex where the search should start
+     * @param vertexTo the vertex that you want to get to 
      * @return if there`s a shortest path to <code>vertexTo</code>, it will return a graph with the shortest path,
      * and will return <b>empty</b> graph (no edges) if there`s no shortest path to the <code>vertexTo</code>
      */
-    public Graph shortestPathAlgorithm(String nodeFrom, String nodeTo)
+    public Graph shortestPathAlgorithm(String vertexFrom, String vertexTo)
     {
         Graph result = new Graph();
+        
+        // find the possible start points in the graph
+        List<Edge> possibleStartPoints = this.edgeList.parallelStream()
+                .filter(edge -> edge.getVertexTo().getName().equalsIgnoreCase(vertexFrom)).collect(Collectors.toList());
         
         return null;
     }
