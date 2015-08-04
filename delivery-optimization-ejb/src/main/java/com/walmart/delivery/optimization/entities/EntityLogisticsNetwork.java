@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -19,7 +20,7 @@ import javax.validation.constraints.NotNull;
  * @author renannp
  */
 @Entity(name = "LogisticsNetwork")
-@Table(name = "tb_logistics_network")
+@Table(name = "tb_logistics_network", uniqueConstraints = @UniqueConstraint(columnNames = {"source_name", "destiny_name", "map_id"}))
 public class EntityLogisticsNetwork implements Serializable 
 {
     private static final long serialVersionUID = 2L;
@@ -62,7 +63,7 @@ public class EntityLogisticsNetwork implements Serializable
     }
 
     public void setSourceName(String sourceName) {
-        this.sourceName = sourceName;
+        this.sourceName = sourceName.toUpperCase();
     }
 
     public String getDestinyName() {
@@ -70,7 +71,7 @@ public class EntityLogisticsNetwork implements Serializable
     }
 
     public void setDestinyName(String destinyName) {
-        this.destinyName = destinyName;
+        this.destinyName = destinyName.toUpperCase();
     }    
 
     public Integer getDistance() {
