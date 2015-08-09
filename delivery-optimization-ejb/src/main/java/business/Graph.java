@@ -76,6 +76,12 @@ public class Graph
         public Vertex getVertexTo() {
             return vertexTo;
         }
+        
+        @Override
+        public String toString()
+        {
+            return this.vertexFrom + " -----> " + this.vertexTo + " (" + this.distance + ")";
+        }
     }
     
     List<Edge> edgeList;
@@ -105,7 +111,7 @@ public class Graph
     {
         for (Edge e : this.edgeList)
         {
-            System.out.println(e.vertexFrom + " -----> " + e.vertexTo + " (" + e.distance + ")");
+            System.out.println(e);
         }
     }
     
@@ -113,17 +119,26 @@ public class Graph
      * This method executes the Dijkstra's shortest path algorithm
      * @param vertexFrom the name of the vertex where the search should start
      * @param vertexTo the vertex that you want to get to 
-     * @return if there`s a shortest path to <code>vertexTo</code>, it will return a graph with the shortest path,
-     * and will return <b>empty</b> graph (no edges) if there`s no shortest path to the <code>vertexTo</code>
+     * @return if there`s a shortest path to <code>vertexTo</code>, it will return a graph with the shortest path <b>only</b>,
+     * and will return <b>empty</b> graph (no edges) if there`s no shortest path to the <code>vertexTo</code> or if there`s no way to reach <code>vertexTo</code> 
      */
     public Graph shortestPathAlgorithm(String vertexFrom, String vertexTo)
     {
-        Graph result = new Graph();
+        Graph resultGraph = new Graph();
+        
+        //check that the vertexTo is in the map
+        if (!this.edgeList.parallelStream().anyMatch(edge -> edge.getVertexTo().getName().equals(vertexTo)))
+            return resultGraph;
         
         // find the possible start points in the graph
         List<Edge> possibleStartPoints = this.edgeList.parallelStream()
-                .filter(edge -> edge.getVertexTo().getName().equalsIgnoreCase(vertexFrom)).collect(Collectors.toList());
+                .filter(edge -> edge.getVertexFrom().getName().equalsIgnoreCase(vertexFrom)).collect(Collectors.toList());
         
+        if (possibleStartPoints.isEmpty())
+            return resultGraph;
+        
+        possibleStartPoints.stream().forEach(System.out::println);
+            
         return null;
     }
 }
