@@ -103,7 +103,8 @@ public class Graph
         
         // all nodes are already marked as unvisited as that's set in the constructor
         
-        while (unvisitedList.size() > 0 && !hasVisitedDestination)
+        // while there are vertices to be visited and destination wasn`t found and the current vertex's value isn`t infinity
+        while (unvisitedList.size() > 0 && !hasVisitedDestination && current.getCost() < Integer.MAX_VALUE)
         {
             // calculate the cost of the neighbors (or vertices)
             for (Edge e : current.getEdges())
