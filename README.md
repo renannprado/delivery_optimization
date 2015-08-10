@@ -6,6 +6,8 @@ This application is a test for Walmart's job selection process.
 
 This project is being continuously built and can be accessed through the following URL: http://dev.renann.me/walmart
 
+![Screen shot of the application](http://s16.postimg.org/ki3ehyikl/print.png)
+
 ### What is this repository for? ###
 
 * Quick summary
