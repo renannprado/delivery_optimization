@@ -24,7 +24,6 @@ public class ApplicationConfig extends Application
      */
     private void addRestResourceClasses(Set<Class<?>> resources) 
     {
-        resources.add(com.walmart.delivery.optimization.config.JacksonConfig.class);
         resources.add(com.walmart.delivery.optimization.rest.DeliveryOptimizationServices.class);
     }
 }
