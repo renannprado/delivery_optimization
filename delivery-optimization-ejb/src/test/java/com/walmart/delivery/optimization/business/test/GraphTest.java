@@ -118,4 +118,32 @@ public class GraphTest {
         
         Assert.assertEquals(0, shortestPath.size());
     }
+    
+    @Test
+    public void unconnectedTest()
+    {
+         List<EntityLogisticsNetwork> network = new ArrayList<>();
+        
+        network.add(new EntityLogisticsNetwork() {{
+            setSourceName("RUA_A");
+            setDestinyName("RUA_B");
+            setDistance(10);
+        }});
+        network.add(new EntityLogisticsNetwork() {{
+            setSourceName("RUA_A");
+            setDestinyName("RUA_D");
+            setDistance(3);
+        }});
+        network.add(new EntityLogisticsNetwork() {{
+            setSourceName("RUA_C");
+            setDestinyName("RUA_D");
+            setDistance(5);
+        }});
+    
+        Graph graph = Graph.buildGraphFromLogisticsNetwork(network);
+        
+        Stack<Vertex> shortestPath = graph.shortestPathAlgorithm("RUA_A", "RUA_C");
+        
+        Assert.assertEquals(0, shortestPath.size());
+    }
 }
