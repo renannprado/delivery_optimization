@@ -3,142 +3,145 @@ package business;
 import com.walmart.delivery.optimization.entities.EntityLogisticsNetwork;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.Stack;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  *
  * @author renannp
  */
 public class Graph 
-{   
-    public static class Vertex
-    {
-        private final String name;
-
-        public Vertex(String name)
-        {
-            this.name = name;
-        }
-        
-        public String getName() {
-            return name;
-        }
-        
-        @Override
-        public int hashCode() {
-            int hash = 3;
-            hash = 53 * hash + Objects.hashCode(this.name);
-            return hash;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (obj == null) {
-                return false;
-            }
-            if (getClass() != obj.getClass()) {
-                return false;
-            }
-            final Vertex other = (Vertex) obj;
-            if (!Objects.equals(this.name, other.name)) {
-                return false;
-            }
-            return true;
-        }
-
-        @Override
-        public String toString() {
-            return "Vertex{" + "name=" + name + '}';
-        }
-    }
-    
-    public static class Edge 
-    {
-        private final Integer distance;
-        private final Vertex vertexFrom;
-        private final Vertex vertexTo;
-
-        public Edge(Integer distance, Vertex vertexFrom, Vertex vertexTo) {
-            this.distance = distance;
-            this.vertexFrom = vertexFrom;
-            this.vertexTo = vertexTo;
-        }
-        
-        public Integer getDistance() {
-            return distance;
-        }        
-
-        public Vertex getVertexFrom() {
-            return vertexFrom;
-        }
-        
-        public Vertex getVertexTo() {
-            return vertexTo;
-        }
-        
-        @Override
-        public String toString()
-        {
-            return this.vertexFrom + " -----> " + this.vertexTo + " (" + this.distance + ")";
-        }
-    }
-    
-    List<Edge> edgeList;
+{       
+    // ConcurrentHashMap is faster than regular hashmap
+    private final ConcurrentHashMap<String, Vertex> vertexList;
     
     public Graph() 
     {
-        this.edgeList = new ArrayList<>();
+        this.vertexList = new ConcurrentHashMap<>();
     }
     
-    public void addEdge(Edge n)
+    public void addVertex(Vertex v)
     {
-        this.edgeList.add(n);
+        this.vertexList.put(v.getName(), v);
+    }
+    
+    public void addVertices(ConcurrentHashMap<String, Vertex> vertices)
+    {
+        this.vertexList.putAll(vertices);
     }
     
     public static Graph buildGraphFromLogisticsNetwork(List<EntityLogisticsNetwork> network)
     {
         Graph g = new Graph();
         
-        network.stream().forEach((path) -> {
-            g.addEdge(new Edge(path.getDistance(), new Vertex(path.getSourceName()), new Vertex(path.getDestinyName())));
-        });
+        ConcurrentHashMap<String, Vertex> vertexHashMap = new ConcurrentHashMap<>();
+        
+        Vertex vFrom;
+        Vertex vTo;
+        
+        for (EntityLogisticsNetwork e : network)
+        {
+            if ((vFrom = vertexHashMap.get(e.getSourceName())) == null)
+            {
+                vFrom = new Vertex(e.getSourceName());
+                vertexHashMap.put(vFrom.getName(), vFrom);
+            }
+            
+            if ((vTo = vertexHashMap.get(e.getDestinyName())) == null) 
+            {
+                vTo = new Vertex(e.getDestinyName());
+                vertexHashMap.put(vTo.getName(), vTo);
+            }
+            
+            vFrom.addEdge(vTo, e.getDistance());
+        }
+        
+        g.addVertices(vertexHashMap);
         
         return g;
     }
     
     public void printGraph()
     {
-        for (Edge e : this.edgeList)
-        {
+        this.vertexList.values().stream().forEach((e) -> {
             System.out.println(e);
-        }
+        });
     }
     
     /**
      * This method executes the Dijkstra's shortest path algorithm
-     * @param vertexFrom the name of the vertex where the search should start
-     * @param vertexTo the vertex that you want to get to 
-     * @return if there`s a shortest path to <code>vertexTo</code>, it will return a graph with the shortest path <b>only</b>,
-     * and will return <b>empty</b> graph (no edges) if there`s no shortest path to the <code>vertexTo</code> or if there`s no way to reach <code>vertexTo</code> 
+     * @param vertexFromName the name of the vertex where the search should start
+     * @param vertexToName the vertex that you want to get to 
+     * @return if there`s a shortest path to <code>vertexTo</code>, it will return a stack with the shortest path,
+     * and will return <b>empty</b> stack if there`s no shortest path to the <code>vertexTo</code> or if there`s no way to reach <code>vertexTo</code> 
      */
-    public Graph shortestPathAlgorithm(String vertexFrom, String vertexTo)
+    public Stack<Vertex> shortestPathAlgorithm(String vertexFromName, String vertexToName)
     {
-        Graph resultGraph = new Graph();
+        Stack<Vertex> shortestPathStack = new Stack<>();
         
-        //check that the vertexTo is in the map
-        if (!this.edgeList.parallelStream().anyMatch(edge -> edge.getVertexTo().getName().equals(vertexTo)))
-            return resultGraph;
+        Vertex current = null;
+        List<Vertex> unvisitedList = new ArrayList<>();
         
-        // find the possible start points in the graph
-        List<Edge> possibleStartPoints = this.edgeList.parallelStream()
-                .filter(edge -> edge.getVertexFrom().getName().equalsIgnoreCase(vertexFrom)).collect(Collectors.toList());
-        
-        if (possibleStartPoints.isEmpty())
-            return resultGraph;
-        
-        possibleStartPoints.stream().forEach(System.out::println);
+        // set the the cost to "infinity" (Integer.MAX_VALUE in this case) 
+        for (Vertex v : this.vertexList.values()) {
+            if (!v.getName().equals(vertexFromName))
+                v.setCost(Integer.MAX_VALUE, null);
+            else
+                current = v;
             
-        return null;
+            unvisitedList.add(v);
+        }
+        
+        // if the starting point wasn`t found, return empty graph
+        if (current == null)
+            return shortestPathStack;
+        
+        // and 0 to the current vertex
+        current.setCost(0, null);
+        
+        boolean hasVisitedDestination = false;
+        
+        // all nodes are already marked as unvisited as that's set in the constructor
+        
+        while (unvisitedList.size() > 0 && !hasVisitedDestination)
+        {
+            // calculate the cost of the neighbors (or vertices)
+            for (Edge e : current.getEdges())
+            {            
+                // consider just the nodes marked as unvisited
+                if (!e.getVertex().isVisited())
+                {
+                    final int cost = current.getCost() + e.getDistance();
+
+                    if (cost < e.getVertex().getCost())
+                        e.getVertex().setCost(cost, current);
+                }
+            }
+
+            // remove the current vertex from the list of unvisited vertices
+            assert unvisitedList.remove(current);
+            // and mark it as visited
+            current.visit();
+
+            // if the current vertex is visited an is destination
+            if (current.isVisited() && current.getName().equals(vertexToName))
+                hasVisitedDestination = true;
+            else if (unvisitedList.size() > 0)
+                // get the vertex with smallest cost and chose it as the current vertex
+                current = unvisitedList.parallelStream().min((v1, v2) -> Integer.compare(v1.getCost(), v2.getCost())).get();
+        }
+        
+        // if has visited destination, add the vertices to the graph
+        if (hasVisitedDestination)
+        {
+            // go backwars do get the path
+            do
+            {
+                shortestPathStack.push(current);
+                current = current.getShortestPathVertex();
+            } while(current != null);
+        }
+        
+        return shortestPathStack;
     }
 }
