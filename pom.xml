@@ -12,8 +12,9 @@
         <module>delivery-optimization-ejb</module>
     </modules>
     <properties>
-        <wildfly.bom.version>9.0.0.Final</wildfly.bom.version>
+        <wildfly.bom.version>9.0.1.Final</wildfly.bom.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>1.8</java.version>
     </properties>    
     <build>
         <pluginManagement>
@@ -21,7 +22,7 @@
                 <!-- The Maven Surefire plugin tests your application. Here we ensure we are using a version compatible with Arquillian -->
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.10</version>
+                    <version>2.17</version>
                 </plugin>
                 <!-- The WildFly plugin deploys your war to a local WildFly container -->
                 <!-- To use, set the JBOSS_HOME environment variable and run:
@@ -36,8 +37,8 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.3</version>
                     <configuration>
-                        <source>1.8</source>
-                        <target>1.8</target>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -51,11 +52,40 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
+                <groupId>org.jboss.arquillian</groupId>
+                <artifactId>arquillian-bom</artifactId>
+                <version>1.1.8.Final</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>            
+            <dependency>
                 <groupId>javax</groupId>
                 <artifactId>javaee-api</artifactId>
                 <version>7.0</version>
                 <scope>provided</scope>
             </dependency>
+            <dependency>
+                <groupId>org.wildfly.bom</groupId>
+                <artifactId>jboss-javaee-7.0-wildfly</artifactId>
+                <version>${wildfly.bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.wildfly.bom</groupId>
+                <artifactId>jboss-javaee-7.0-wildfly-with-hibernate3</artifactId>
+                <version>${wildfly.bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.wildfly.bom</groupId>
+                <artifactId>jboss-javaee-7.0-wildfly-with-tools</artifactId>
+                <version>${wildfly.bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            
         </dependencies>
     </dependencyManagement>
 </project>

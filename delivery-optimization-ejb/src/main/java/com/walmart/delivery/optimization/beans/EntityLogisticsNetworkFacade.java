@@ -10,8 +10,9 @@ import javax.persistence.PersistenceContext;
  * @author renannp
  */
 @Stateless
-public class EntityLogisticsNetworkFacade extends AbstractFacade<EntityLogisticsNetwork> implements EntityLogisticsNetworkFacadeLocal {
-    @PersistenceContext(unitName = "delivery-optimization_PU")
+public class EntityLogisticsNetworkFacade extends AbstractFacade<EntityLogisticsNetwork> {
+    
+    @PersistenceContext
     private EntityManager em;
 
     @Override

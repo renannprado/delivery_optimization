@@ -1,11 +1,15 @@
 package com.walmart.delivery.optimization.rest;
 
-import com.walmart.delivery.optimization.beans.EntityMapFacadeLocal;
+import business.Graph;
+import com.walmart.delivery.optimization.beans.EntityMapFacade;
+import com.walmart.delivery.optimization.entities.EntityLogisticsNetwork;
 import com.walmart.delivery.optimization.entities.EntityMap;
 import java.io.Serializable;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -19,7 +23,7 @@ import javax.ws.rs.core.MediaType;
 public class DeliveryOptimizationServices implements Serializable
 {
     @EJB
-    EntityMapFacadeLocal entityMapFacade;    
+    EntityMapFacade entityMapEJB;    
     
     @PUT
     @Path(value = "/addLogisticsNetwork")
@@ -33,7 +37,7 @@ public class DeliveryOptimizationServices implements Serializable
         });
         
         // persist the new map in the database
-        this.entityMapFacade.create(newMapRequest);
+        this.entityMapEJB.create(newMapRequest);
 
         return newMapRequest;
     }

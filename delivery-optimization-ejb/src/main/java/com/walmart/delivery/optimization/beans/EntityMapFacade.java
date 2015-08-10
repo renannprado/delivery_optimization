@@ -13,9 +13,9 @@ import javax.persistence.Query;
  * @author renannp
  */
 @Stateless
-public class EntityMapFacade extends AbstractFacade<EntityMap> implements EntityMapFacadeLocal 
+public class EntityMapFacade extends AbstractFacade<EntityMap> 
 {
-    @PersistenceContext(unitName = "delivery-optimization_PU")
+    @PersistenceContext
     private EntityManager em;
 
     @Override
@@ -27,7 +27,7 @@ public class EntityMapFacade extends AbstractFacade<EntityMap> implements Entity
         super(EntityMap.class);
     }
     
-    @Override
+//    @Override
     public List<EntityLogisticsNetwork> getNetworkByMapName(String mapName)
     {
         // search ins't case sensitive
