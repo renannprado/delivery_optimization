@@ -6,6 +6,8 @@
     <container qualifier="jbossas" default="true">
         <configuration>
             <property name="managementPort">9990</property>
+            <property name="username">deploy</property>
+            <property name="password">deploy</property>
         </configuration>
     </container> 
 </arquillian>
