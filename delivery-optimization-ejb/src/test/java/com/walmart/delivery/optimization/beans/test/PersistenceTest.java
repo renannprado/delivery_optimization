@@ -34,7 +34,7 @@ public class PersistenceTest {
     private EntityMapFacade mapEjb;
 
     @PersistenceContext
-    EntityManager asd;
+    EntityManager entityManager;
 
     @Resource
     UserTransaction ut;
@@ -56,9 +56,9 @@ public class PersistenceTest {
     @Before
     public void clean() throws Exception {
         ut.begin();
-        asd.joinTransaction();
-        Query network = asd.createNativeQuery("delete from TB_LOGISTICS_NETWORK ");
-        Query map = asd.createNativeQuery("delete from TB_MAP");
+        entityManager.joinTransaction();
+        Query network = entityManager.createNativeQuery("delete from TB_LOGISTICS_NETWORK ");
+        Query map = entityManager.createNativeQuery("delete from TB_MAP");
         testOutput("network Deteled: " + network.executeUpdate(), "map Deteled: " + map.executeUpdate());
         ut.commit();
     }
