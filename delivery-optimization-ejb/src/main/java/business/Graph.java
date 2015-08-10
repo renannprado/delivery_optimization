@@ -119,7 +119,7 @@ public class Graph
             }
 
             // remove the current vertex from the list of unvisited vertices
-            assert unvisitedList.remove(current);
+            unvisitedList.remove(current);
             // and mark it as visited
             current.visit();
 
