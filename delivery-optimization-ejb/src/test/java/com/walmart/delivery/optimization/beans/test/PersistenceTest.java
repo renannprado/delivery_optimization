@@ -25,7 +25,7 @@ import org.junit.runner.RunWith;
  * @author renannp
  */
 @RunWith(Arquillian.class)
-public class EntityLogisticsNetworkFacadeLocalTest {
+public class PersistenceTest {
 
     @EJB
     private EntityLogisticsNetworkFacade networkEjb;
@@ -64,7 +64,7 @@ public class EntityLogisticsNetworkFacadeLocalTest {
     }
 
     @Test
-    public void shouldBeAbleToInjectEJB() throws Exception 
+    public void simpleMapInsertTest() throws Exception 
     {
         String mapName = "test map";
         EntityMap newMap = new EntityMap();
@@ -87,7 +87,7 @@ public class EntityLogisticsNetworkFacadeLocalTest {
         if (find != null) {
             System.out.println(networkEjb);
         } else {
-            throw new NullPointerException();
+            Assert.fail("The map was not found.");
         }
     }
     
