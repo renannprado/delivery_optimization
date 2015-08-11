@@ -224,6 +224,93 @@
                     <scope>test</scope>
                 </dependency>
             </dependencies>
+            
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.wildfly.plugins</groupId>
+                        <artifactId>wildfly-maven-plugin</artifactId>
+                        <!-- this datasource is used during tests only -->
+                        <executions>
+                            <execution>
+                                <id>test-datasource-deployment</id>
+                                <phase>test-compile</phase>
+                                <goals>
+                                    <goal>add-resource</goal>
+                                </goals>
+                                <configuration>
+                                    <hostname>${wildfly.deploy.host}</hostname>
+                                    <username>${wildfly.deploy.username}</username>
+                                    <password>${wildfly.deploy.password}</password>
+                                    <port>9991</port>
+                                    <address>subsystem=datasources,data-source=TestDS</address>
+                                    <resources>
+                                        <resource>
+                                            <properties>
+                                                <jndi-name>java:jboss/datasources/TestDS</jndi-name>
+                                                <enabled>true</enabled>
+                                                <connection-url>jdbc:h2:mem:test_schema;DB_CLOSE_DELAY=0</connection-url>
+                                                <driver-class>org.h2.Driver</driver-class>
+                                                <driver-name>h2</driver-name>
+                                                <user-name>sa</user-name>
+                                                <password>sa</password>
+                                            </properties>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                            <!-- undeploy the datasource after finishing the tests -->
+                            <execution>
+                                <id>test-datasource-undeploy</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>execute-commands</goal>
+                                </goals>
+                                <configuration>
+                                    <hostname>${wildfly.deploy.host}</hostname>
+                                    <username>${wildfly.deploy.username}</username>
+                                    <password>${wildfly.deploy.password}</password>
+                                    <port>9991</port>
+                                    <execute-commands>
+                                        <commands>
+                                            <command>/subsystem=datasources/data-source=TestDS/:remove</command>
+                                        </commands>
+                                    </execute-commands>
+                                </configuration>
+                            </execution>
+                            <!-- datasource that will be used by application -->
+                            <execution>
+                                <id>datasource-deployment</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>add-resource</goal>
+                                </goals>
+                                <configuration>
+                                    <hostname>${wildfly.deploy.host}</hostname>
+                                    <username>${wildfly.deploy.username}</username>
+                                    <password>${wildfly.deploy.password}</password>
+                                    <port>9991</port>
+                                    <address>subsystem=datasources,data-source=WalmartDS</address>
+                                    <resources>
+                                        <resource>
+                                            <properties>
+                                                <jndi-name>java:jboss/datasources/WalmartDS</jndi-name>
+                                                <enabled>true</enabled>
+                                                <!--<connection-url>jdbc:h2:mem:walmart;DB_CLOSE_DELAY=0</connection-url>-->
+                                                <connection-url>jdbc:h2:tcp://localhost/~/walmart;AUTO_RECONNECT=TRUE</connection-url>
+                                                <driver-class>org.h2.Driver</driver-class>
+                                                <driver-name>h2</driver-name>
+                                                <user-name>sa</user-name>
+                                                <password>sa</password>
+                                            </properties>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 </project>
