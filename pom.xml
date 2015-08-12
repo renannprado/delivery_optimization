@@ -31,6 +31,12 @@
                     <groupId>org.wildfly.plugins</groupId>
                     <artifactId>wildfly-maven-plugin</artifactId>
                     <version>1.0.2.Final</version>
+                    <configuration>
+                        <hostname>${wildfly.deploy.host}</hostname>
+                        <username>${wildfly.deploy.username}</username>
+                        <password>${wildfly.deploy.password}</password>
+                        <port>${wildfly.deploy.managementPort}</port>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
