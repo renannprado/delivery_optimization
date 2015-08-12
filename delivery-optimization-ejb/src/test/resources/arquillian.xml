@@ -5,9 +5,9 @@
 
     <container qualifier="jbossas" default="true">
         <configuration>
-            <property name="managementPort">9991</property>
-            <property name="username">deploy</property>
-            <property name="password">deploy</property>
+            <property name="managementPort">${wildfly.deploy.managementPort}</property>
+            <property name="username">${wildfly.deploy.username}</property>
+            <property name="password">${wildfly.deploy.password}</property>
         </configuration>
     </container> 
 </arquillian>
