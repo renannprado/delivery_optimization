@@ -57,22 +57,17 @@
     </build>
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>org.jboss.arquillian</groupId>
-                <artifactId>arquillian-bom</artifactId>
-                <version>1.1.8.Final</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>            
-            <dependency>
-                <groupId>javax</groupId>
-                <artifactId>javaee-api</artifactId>
-                <version>7.0</version>
-                <scope>provided</scope>
-            </dependency>
+            <!-- Wildfly dependencies -->
             <dependency>
                 <groupId>org.wildfly.bom</groupId>
                 <artifactId>jboss-javaee-7.0-wildfly</artifactId>
+                <version>${wildfly.bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.wildfly.bom</groupId>
+                <artifactId>jboss-javaee-7.0-wildfly-with-tools</artifactId>
                 <version>${wildfly.bom.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
@@ -85,13 +80,20 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>org.wildfly.bom</groupId>
-                <artifactId>jboss-javaee-7.0-wildfly-with-tools</artifactId>
-                <version>${wildfly.bom.version}</version>
+                <groupId>javax</groupId>
+                <artifactId>javaee-api</artifactId>
+                <version>7.0</version>
+                <scope>provided</scope>
+            </dependency>
+            
+            <!-- Arquillian dependencies -->            
+            <dependency>
+                <groupId>org.jboss.arquillian</groupId>
+                <artifactId>arquillian-bom</artifactId>
+                <version>1.1.8.Final</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            
         </dependencies>
     </dependencyManagement>
     <profiles>
