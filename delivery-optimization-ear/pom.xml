@@ -30,6 +30,12 @@
             <plugin>
                 <groupId>org.wildfly.plugins</groupId>
                 <artifactId>wildfly-maven-plugin</artifactId>
+                <configuration>
+                    <hostname>${wildfly.deploy.host}</hostname>
+                    <username>${wildfly.deploy.username}</username>
+                    <password>${wildfly.deploy.password}</password>
+                    <port>${wildfly.deploy.managementPort}</port>
+                </configuration>
                 <executions>
                     <execution>
                         <id>deployment-config</id>
@@ -37,12 +43,6 @@
                         <goals> 
                             <goal>deploy</goal> 
                         </goals>
-                        <configuration>
-                            <hostname>${wildfly.deploy.host}</hostname>
-                            <username>${wildfly.deploy.username}</username>
-                            <password>${wildfly.deploy.password}</password>
-                            <port>9991</port>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>

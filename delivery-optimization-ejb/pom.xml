@@ -172,23 +172,50 @@
             </plugin>
         </plugins>
     </build>
-    <profiles>
+    <profiles>        
         <profile>
-            <!-- The default profile skips all tests, though you can tune it 
-            to run just unit tests based on a custom pattern -->
-            <!-- Seperate profiles are provided for running all tests, including 
-            Arquillian tests that execute in the specified container -->
-            <id>default</id>
+            <id>datasource-deployment</id>
             <activation>
                 <activeByDefault>false</activeByDefault>
             </activation>
             <build>
                 <plugins>
                     <plugin>
-                        <artifactId>maven-surefire-plugin</artifactId>
+                        <groupId>org.wildfly.plugins</groupId>
+                        <artifactId>wildfly-maven-plugin</artifactId>
                         <configuration>
-                            <skip>true</skip>
+                            <hostname>${wildfly.deploy.host}</hostname>
+                            <username>${wildfly.deploy.username}</username>
+                            <password>${wildfly.deploy.password}</password>
+                            <port>${wildfly.deploy.namangementPort}</port>
                         </configuration>
+                        <executions>
+                            <!-- datasource that will be used by application -->
+                            <execution>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>add-resource</goal>
+                                </goals>
+                                <configuration>
+                                    <address>subsystem=datasources,data-source=WalmartDS</address>
+                                    <resources>
+                                        <resource>
+                                            <properties>
+                                                <jndi-name>java:jboss/datasources/WalmartDS</jndi-name>
+                                                <enabled>true</enabled>
+                                                <!-- This connection will create the database files under the user's home  -->
+                                                <!-- Since the user that is executing usually have permission in its home folder, it's safe to create this connection -->
+                                                <connection-url>jdbc:h2:~/h2/walmart_db;AUTO_SERVER=TRUE</connection-url>
+                                                <driver-class>org.h2.Driver</driver-class>
+                                                <driver-name>h2</driver-name>
+                                                <user-name>sa</user-name>
+                                                <password>sa</password>
+                                            </properties>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>
@@ -216,6 +243,9 @@
             in a remote WildFly instance -->
             <!-- Run with: mvn clean test -Parq-wildfly-remote -->
             <id>arq-wildfly-remote</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
             <dependencies>
                 <dependency>
                     <groupId>org.wildfly</groupId>
@@ -224,14 +254,26 @@
                     <scope>test</scope>
                 </dependency>
             </dependencies>
-            
+                    
             <build>
                 <plugins>
                     <plugin>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <skip>false</skip>
+                        </configuration>
+                    </plugin>
+                    <plugin>
                         <groupId>org.wildfly.plugins</groupId>
                         <artifactId>wildfly-maven-plugin</artifactId>
-                        <!-- this datasource is used during tests only -->
+                        <configuration>
+                            <hostname>${wildfly.deploy.host}</hostname>
+                            <username>${wildfly.deploy.username}</username>
+                            <password>${wildfly.deploy.password}</password>
+                            <port>${wildfly.deploy.managementPort}</port>
+                        </configuration>
                         <executions>
+                            <!-- this datasource is used during tests only -->
                             <execution>
                                 <id>test-datasource-deployment</id>
                                 <phase>test-compile</phase>
@@ -239,10 +281,6 @@
                                     <goal>add-resource</goal>
                                 </goals>
                                 <configuration>
-                                    <hostname>${wildfly.deploy.host}</hostname>
-                                    <username>${wildfly.deploy.username}</username>
-                                    <password>${wildfly.deploy.password}</password>
-                                    <port>9991</port>
                                     <address>subsystem=datasources,data-source=TestDS</address>
                                     <resources>
                                         <resource>
@@ -267,44 +305,15 @@
                                     <goal>execute-commands</goal>
                                 </goals>
                                 <configuration>
-                                    <hostname>${wildfly.deploy.host}</hostname>
+                                    <!--                                    <hostname>${wildfly.deploy.host}</hostname>
                                     <username>${wildfly.deploy.username}</username>
                                     <password>${wildfly.deploy.password}</password>
-                                    <port>9991</port>
+                                    <port>${wildfly.deploy.managementPort}</port>-->
                                     <execute-commands>
                                         <commands>
                                             <command>/subsystem=datasources/data-source=TestDS/:remove</command>
                                         </commands>
                                     </execute-commands>
-                                </configuration>
-                            </execution>
-                            <!-- datasource that will be used by application -->
-                            <execution>
-                                <id>datasource-deployment</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>add-resource</goal>
-                                </goals>
-                                <configuration>
-                                    <hostname>${wildfly.deploy.host}</hostname>
-                                    <username>${wildfly.deploy.username}</username>
-                                    <password>${wildfly.deploy.password}</password>
-                                    <port>9991</port>
-                                    <address>subsystem=datasources,data-source=WalmartDS</address>
-                                    <resources>
-                                        <resource>
-                                            <properties>
-                                                <jndi-name>java:jboss/datasources/WalmartDS</jndi-name>
-                                                <enabled>true</enabled>
-                                                <!--<connection-url>jdbc:h2:mem:walmart;DB_CLOSE_DELAY=0</connection-url>-->
-                                                <connection-url>jdbc:h2:tcp://localhost/~/walmart;AUTO_RECONNECT=TRUE</connection-url>
-                                                <driver-class>org.h2.Driver</driver-class>
-                                                <driver-name>h2</driver-name>
-                                                <user-name>sa</user-name>
-                                                <password>sa</password>
-                                            </properties>
-                                        </resource>
-                                    </resources>
                                 </configuration>
                             </execution>
                         </executions>
