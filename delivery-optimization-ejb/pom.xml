@@ -96,8 +96,12 @@
 
     <build>
         <resources>
+            <!-- this is to fix an error where the persistence.xml wasn't being copied into the jar -->
             <resource>
-                <!-- this is used to filter the arquillian.xml file that contains the configuration to be used during tests -->
+                <directory>${basedir}/src/main/resources</directory>
+            </resource>
+            <resource>
+                  <!--this is used to filter the arquillian.xml file that contains the configuration to be used during tests-->  
                 <directory>${basedir}/src/test/resources</directory>
                 <filtering>true</filtering>  
                 <targetPath>${basedir}/target/test-classes</targetPath>
