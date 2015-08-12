@@ -12,18 +12,6 @@
     <packaging>ear</packaging>
 
     <name>delivery-optimization-ear</name>
-    
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.wildfly.bom</groupId>
-                <artifactId>jboss-javaee-7.0-wildfly</artifactId>
-                <version>${wildfly.bom.version}</version>
-                <scope>import</scope>
-                <type>pom</type>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <build>
         <plugins>
@@ -55,7 +43,7 @@
                         <webModule>
                             <groupId>com.walmart</groupId>
                             <artifactId>delivery-optimization-web</artifactId>
-                            <contextRoot>/walmart</contextRoot>
+                            <contextRoot>${webContext}</contextRoot>
                         </webModule>
                     </modules>
                 </configuration>
