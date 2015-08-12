@@ -41,7 +41,7 @@ public class PersistenceTest {
 
     @Deployment
     public static JavaArchive createTestArchive() {
-        JavaArchive jar = ShrinkWrap.create(JavaArchive.class, "test.jar")
+        JavaArchive jar = ShrinkWrap.create(JavaArchive.class, "delivery-optimization-ejb-test.jar")
                 .addClass(EntityMap.class)
                 .addClass(AbstractFacade.class)
                 .addClass(EntityLogisticsNetwork.class)

@@ -47,6 +47,18 @@ public class EntityLogisticsNetwork implements Serializable
     @JoinColumn(nullable = false, name = "map_id", referencedColumnName = "id")
     @JsonIgnore
     private EntityMap entityMap; 
+
+    public EntityLogisticsNetwork() 
+    {
+        /* hibernate needs a constructor with no parameters */
+    }
+    
+    public EntityLogisticsNetwork(String sourceName, String destinyName, Integer distance, EntityMap entityMap) {
+        this.setSourceName(sourceName);
+        this.setDestinyName(destinyName);
+        this.distance = distance;
+        this.entityMap = entityMap;
+    }
     
     @JsonProperty
     public Long getId() {
@@ -62,7 +74,7 @@ public class EntityLogisticsNetwork implements Serializable
         return sourceName;
     }
 
-    public void setSourceName(String sourceName) {
+    public final void setSourceName(String sourceName) {
         this.sourceName = sourceName.toUpperCase();
     }
 
@@ -70,7 +82,7 @@ public class EntityLogisticsNetwork implements Serializable
         return destinyName;
     }
 
-    public void setDestinyName(String destinyName) {
+    public final void setDestinyName(String destinyName) {
         this.destinyName = destinyName.toUpperCase();
     }    
 

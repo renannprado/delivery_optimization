@@ -33,6 +33,20 @@ public class EntityMap implements Serializable
 {
     private static final long serialVersionUID = 1L;
 
+    public EntityMap() 
+    {
+        /* hibernate needs a constructor with no parameters */
+    }
+    
+    public EntityMap(String name) {
+        this(name, null);
+    }
+    
+    public EntityMap(String name, List<EntityLogisticsNetwork> logisticsNetwork) {
+        this.setName(name);
+        this.logisticsNetwork = logisticsNetwork;
+    }
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @JsonIgnore // this is used to prevent the webservice caller to be able to set the id, which would cause exceptions/errros
@@ -59,7 +73,7 @@ public class EntityMap implements Serializable
         return name;
     }
 
-    public void setName(String name) {
+    public final void setName(String name) {
         this.name = name.toUpperCase();
     }
 
