@@ -12,49 +12,17 @@
         <module>delivery-optimization-ejb</module>
     </modules>
     <properties>
-        <wildfly.bom.version>9.0.1.Final</wildfly.bom.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <arquillian.bom.version>1.1.8.Final</arquillian.bom.version>
         <java.version>1.8</java.version>
+        <webContext>/walmart</webContext>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <wildfly.bom.version>9.0.1.Final</wildfly.bom.version>
     </properties>    
-    <build>
-        <pluginManagement>
-            <plugins>
-                <!-- The Maven Surefire plugin tests your application. Here we ensure we are using a version compatible with Arquillian -->
-                <plugin>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.17</version>
-                </plugin>
-                <!-- The WildFly plugin deploys your war to a local WildFly container -->
-                <!-- To use, set the JBOSS_HOME environment variable and run:
-                mvn package wildfly:deploy -->
-                <plugin>
-                    <groupId>org.wildfly.plugins</groupId>
-                    <artifactId>wildfly-maven-plugin</artifactId>
-                    <version>1.0.2.Final</version>
-                    <configuration>
-                        <hostname>${wildfly.deploy.host}</hostname>
-                        <username>${wildfly.deploy.username}</username>
-                        <password>${wildfly.deploy.password}</password>
-                        <port>${wildfly.deploy.managementPort}</port>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.3</version>
-                    <configuration>
-                        <source>${java.version}</source>
-                        <target>${java.version}</target>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-dependency-plugin</artifactId>
-                    <version>2.10</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
+    <contributors>
+        <contributor>
+            <name>Renann Prado</name>
+        </contributor>
+    </contributors>
     <dependencyManagement>
         <dependencies>
             <!-- Wildfly dependencies -->
@@ -90,7 +58,7 @@
             <dependency>
                 <groupId>org.jboss.arquillian</groupId>
                 <artifactId>arquillian-bom</artifactId>
-                <version>1.1.8.Final</version>
+                <version>${arquillian.bom.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -98,10 +66,7 @@
     </dependencyManagement>
     <profiles>
         <profile>
-            <!-- The default profile skips all tests, though you can tune it 
-            to run just unit tests based on a custom pattern -->
-            <!-- Seperate profiles are provided for running all tests, including 
-            Arquillian tests that execute in the specified container -->
+            <!-- By default, no tests are run-->
             <id>default</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
@@ -117,6 +82,7 @@
                 </plugins>
             </build>
         </profile>
+        <!-- this profile is used to give default configuration of wildfly (usually local) -->
         <profile>
             <id>wildfly-config</id>
             <activation>
@@ -130,4 +96,44 @@
             </properties>
         </profile>
     </profiles>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <!-- The Maven Surefire plugin tests your application. Here we ensure we are using a version compatible with Arquillian -->
+                <plugin>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.17</version>
+                </plugin>
+                
+                <!-- The WildFly plugin deploys your war to a local WildFly container -->
+                <!-- To use, set the JBOSS_HOME environment variable and run:
+                mvn package wildfly:deploy -->
+                <plugin>
+                    <groupId>org.wildfly.plugins</groupId>
+                    <artifactId>wildfly-maven-plugin</artifactId>
+                    <version>1.0.2.Final</version>
+                    <configuration>
+                        <hostname>${wildfly.deploy.host}</hostname>
+                        <username>${wildfly.deploy.username}</username>
+                        <password>${wildfly.deploy.password}</password>
+                        <port>${wildfly.deploy.managementPort}</port>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.3</version>
+                    <configuration>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>2.10</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>
