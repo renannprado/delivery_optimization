@@ -53,6 +53,11 @@ deliveryOptmizationApp.controller('InserMapController', function($scope, $http){
             return;
         }
         
+        if ($scope.sourcePoint === $scope.destinyPoint) {
+            alert('The source and destiny paths must be different.');
+            return;
+        }
+        
         $scope.newMap.logisticsNetwork.push({
             'sourceName': $scope.sourcePoint,
             'destinyName': $scope.destinyPoint,
