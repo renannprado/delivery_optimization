@@ -52,26 +52,16 @@
                         <executions>
                             <!-- this datasource is used during tests only -->
                             <execution>
-                                <id>test-datasource-deployment-web</id>
                                 <phase>test-compile</phase>
                                 <goals>
-                                    <goal>add-resource</goal>
+                                    <goal>execute-commands</goal>
                                 </goals>
                                 <configuration>
-                                    <address>subsystem=datasources,data-source=TestDSWeb</address>
-                                    <resources>
-                                        <resource>
-                                            <properties>
-                                                <jndi-name>java:jboss/datasources/TestDSWeb</jndi-name>
-                                                <enabled>true</enabled>
-                                                <connection-url>jdbc:h2:mem:test_schema_web;DB_CLOSE_DELAY=0</connection-url>
-                                                <driver-class>org.h2.Driver</driver-class>
-                                                <driver-name>h2</driver-name>
-                                                <user-name>sa</user-name>
-                                                <password>sa</password>
-                                            </properties>
-                                        </resource>
-                                    </resources>
+                                    <execute-commands>
+                                        <scripts>
+                                            <script>${basedir}/test_datasource_creation.cli</script>
+                                        </scripts>
+                                    </execute-commands>
                                 </configuration>
                             </execution>
                             <!-- undeploy the datasource after finishing the tests -->
@@ -83,9 +73,9 @@
                                 </goals>
                                 <configuration>
                                     <execute-commands>
-                                        <commands>
-                                            <command>/subsystem=datasources/data-source=TestDSWeb/:remove</command>
-                                        </commands>
+                                        <scripts>
+                                            <script>${basedir}/test_datasource_remove.cli</script>
+                                        </scripts>
                                     </execute-commands>
                                 </configuration>
                             </execution>

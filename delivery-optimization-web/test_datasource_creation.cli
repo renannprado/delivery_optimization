@@ -1,0 +1,14 @@
+if (outcome == success) of /subsystem=datasources/data-source=TestDSWeb/:read-resource
+	/subsystem=datasources/data-source=TestDSWeb/:remove
+end-if
+
+if (outcome != success) of /subsystem=datasources/data-source=TestDSWeb/:read-resource
+    data-source add --name=TestDSWeb \
+                    --jndi-name=java:jboss/datasources/TestDSWeb \
+                    --enabled=true \
+                    --connection-url=jdbc:h2:mem:test_schema_web;DB_CLOSE_DELAY=0 \
+                    --driver-class=org.h2.Driver \
+                    --driver-name=h2 \
+                    --user-name=sa \
+                    --password=sa
+end-if
