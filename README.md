@@ -45,14 +45,74 @@ Even after being able to successfully call these commands, you **must** setup th
 
 **JBOSS_HOME:**  C:\development\wildfly-9.0.1.Final
 
-###
+Go to **bin** directory inside of JBOSS_HOME and execute the below script (or relevant shell script if you are using linux):
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+```
+#!shellscript
+add-user.bat
+```
+
+Choose the **Management User** and create a user called **admin** with password **admin** - this will save configuration time as it's default user/password configure in the project.
+
+Now it is time to start the server. **Make sure that you have ports 8080 and 9990 available in your machine otherwise Wildfly won't start. Changing the default port configuration is not covered here, though you can easily figure out by opening the <JBOSS_HOME>/standalone/configuration/standalone.xml file.**
+
+In order to start using the **standalone** profile, execute the bloe command (still in **bin** folder of Wildfly):
+
+```
+#!shellscript
+standalone.bat
+```
+
+After starting you should see a message similar to the below one:
+
+```
+#!
+06:55:58,394 INFO  [org.jboss.as] (Controller Boot Thread) WFLYSRV0025: WildFly Full 9.0.1.Final (WildFly Core 1.0.1.Final) started in 9113ms - Started 487 of 671 services (237 services are lazy, passive or on-demand)
+```
+
+Now try to access http://localhost:8080/ , if everything is ok, you should see "Welcome to Wildfly" message.
+
+
+## Database configuration ##
+
+This application creates [H2 embedded database](http://h2database.com/) datasource during deployment, so you don't need to setup anything related to database. All you need is to make sure that the user that will execute Wildfly has permission to write into his own home folder :)
+
+## How to run tests ##
+
+**Wildfly must be running.**
+
+By default the tests are skiped, so you need to enable the **arq-wildfly-remote-web** profile.
+Go to the root folder of the repository and run the below command:
+
+```
+#!shellscript
+mvn clean package -P arq-wildfly-remote-web
+```
+
+## Deployment instructions##
+
+**Wildfly must be running.**
+
+
+Go to the root folder of the repository and run the below command:
+
+```
+#!shellscript
+mvn clean install
+```
+
+If you see the below message in the console of Wildfly, then the deploy must have been successful:
+
+```
+#!
+07:01:18,183 INFO  [org.wildfly.extension.undertow] (ServerService Thread Pool -- 64) WFLYUT0021: Registered web context: /walmart
+```
+
+Now you should be able to access the application going to http://localhost:8080/walmart
+
+If you need to call the shortest path algorithm directly for some reason, you can use the below URL as sample:
+
+http://localhost:8080/walmart/rest/getShortestPath?mapName=sp&from=a&to=b&autonomy=10&gasPrice=2
 
 ### List of technologies ###
 
@@ -63,6 +123,14 @@ Even after being able to successfully call these commands, you **must** setup th
 ## Application Server ##
 
 * ![Wildfly Application Server](https://www.jboss.org/dms/wildfly_splash/splash_wildflylogo_small.png) [Wildfly](http://wildfly.org/)
+
+## Build tool ##
+
+* ![Apache Maven Logo](http://maven.apache.org/images/logos/maven-feather.png) [Apache Maven](http://maven.apache.org)
+
+## Continuous Integration ##
+
+* ![Jenkins Logo](https://jenkins-ci.org/sites/default/files/jenkins_logo.png) [Jenkins CI](https://jenkins-ci.org/)
 
 ## Testing ##
 
