@@ -1,8 +1,8 @@
 package com.walmart.delivery.optimization.rest;
 
-import business.Graph;
-import business.Vertex;
 import com.walmart.delivery.optimization.beans.EntityMapFacade;
+import com.walmart.delivery.optimization.business.Graph;
+import com.walmart.delivery.optimization.business.Vertex;
 import com.walmart.delivery.optimization.entities.EntityLogisticsNetwork;
 import com.walmart.delivery.optimization.entities.EntityMap;
 import com.walmart.delivery.optimization.rest.responses.ResponseVertex;
@@ -14,7 +14,6 @@ import javax.ejb.EJB;
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;

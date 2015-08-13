@@ -34,11 +34,7 @@ public class TestAPI {
         return ShrinkWrap
                 .create(WebArchive.class, "delivery-optimization-web-test.war")
                 .addPackages(true, "com.walmart")
-                .addPackages(true, "business")
                 .addAsResource("test-persistence.xml", "META-INF/persistence.xml");
-        
-        //        addPackages(true, "com.project.beans", "com.project.model", "com.project.services")
-        //https://github.com/arquillian/arquillian-extension-rest/tree/master/rest-client
     }
     
     private String testMap1 = "test map";

@@ -1,6 +1,6 @@
 package com.walmart.delivery.optimization.rest.responses;
 
-import business.Vertex;
+import com.walmart.delivery.optimization.business.Vertex;
 
 /**
  *

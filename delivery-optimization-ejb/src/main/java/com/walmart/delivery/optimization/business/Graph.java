@@ -1,4 +1,4 @@
-package business;
+package com.walmart.delivery.optimization.business;
 
 import com.walmart.delivery.optimization.entities.EntityLogisticsNetwork;
 import java.util.ArrayList;

@@ -1,7 +1,7 @@
 package com.walmart.delivery.optimization.business.test;
 
-import business.Graph;
-import business.Vertex;
+import com.walmart.delivery.optimization.business.Graph;
+import com.walmart.delivery.optimization.business.Vertex;
 import com.walmart.delivery.optimization.entities.EntityLogisticsNetwork;
 import java.util.ArrayList;
 import java.util.List;

@@ -1,8 +1,7 @@
-package business;
+package com.walmart.delivery.optimization.business;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  *
