@@ -75,8 +75,7 @@ deliveryOptmizationApp.controller('InserMapController', function($scope, $http){
 deliveryOptmizationApp.controller('ShortestPathFinderController', function($scope, $http){
 
     $scope.init = function () {
-//        $http.get('./rest/getAllMaps')
-        $http.get('http://localhost:8080/walmart/rest/getAllMaps')
+        $http.get('./rest/getAllMaps')
                 .then(function (response) {
                     $scope.mapList = response.data;
                     if ($scope.mapList.length === 0)
@@ -84,6 +83,8 @@ deliveryOptmizationApp.controller('ShortestPathFinderController', function($scop
                 }, function (error) {
                     alert('An error has occurred while trying to get the maps. Error: ' + JSON.stringify(error));
                 });
+                
+        $scope.calculationResponse = null;
     };
     
     // the server returns the entites, and that may cause destiny and source to repeat as only the pair must be unique
@@ -109,9 +110,7 @@ deliveryOptmizationApp.controller('ShortestPathFinderController', function($scop
     };
     
     $scope.calculateShortestPath = function(){
-        alert(JSON.stringify($scope.selectedMap));
-        $http.get("http://localhost:8080/walmart/rest/getShortestPath", 
-//        $http.get("./rest/getShortestPath", 
+        $http.get("./rest/getShortestPath", 
                     { 
                         params: { 
                             mapName: $scope.selectedMap.name, 
@@ -120,7 +119,7 @@ deliveryOptmizationApp.controller('ShortestPathFinderController', function($scop
                         }
                     })
                     .then(function(response) { 
-                        alert(JSON.stringify(response)); 
+                        $scope.calculationResponse = response.data;
                     }, function (error) {
                     alert('An error has occurred while trying to get the maps. Error: ' + JSON.stringify(error));
                 });
