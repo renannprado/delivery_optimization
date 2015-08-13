@@ -71,3 +71,60 @@ deliveryOptmizationApp.controller('InserMapController', function($scope, $http){
     
     $scope.init();
 });
+
+deliveryOptmizationApp.controller('ShortestPathFinderController', function($scope, $http){
+
+    $scope.init = function () {
+//        $http.get('./rest/getAllMaps')
+        $http.get('http://localhost:8080/walmart/rest/getAllMaps')
+                .then(function (response) {
+                    $scope.mapList = response.data;
+                    if ($scope.mapList.length === 0)
+                        alert('The webservice returned 0 maps. You need to register a map first.');
+                }, function (error) {
+                    alert('An error has occurred while trying to get the maps. Error: ' + JSON.stringify(error));
+                });
+    };
+    
+    // the server returns the entites, and that may cause destiny and source to repeat as only the pair must be unique
+    // so in here we remove the repeated values in order no to confuse the user
+    $scope.onMapSelect = function () {       
+        
+        $scope.availableSources = [];
+        $scope.availableDestinations = [];
+        
+        for (var i = 0; i < $scope.selectedMap.logisticsNetwork.length; i++)
+            $scope.availableSources.push($scope.selectedMap.logisticsNetwork[i].sourceName);
+        
+        for (var i = 0; i < $scope.selectedMap.logisticsNetwork.length; i++)
+            $scope.availableDestinations.push($scope.selectedMap.logisticsNetwork[i].destinyName);
+        
+        $scope.availableSources = $scope.availableSources.filter(function (item, pos, self) {
+            return self.indexOf(item) == pos;
+        });
+        
+        $scope.availableDestinations = $scope.availableDestinations.filter(function (item, pos, self) {
+            return self.indexOf(item) == pos;
+        });
+    };
+    
+    $scope.calculateShortestPath = function(){
+        alert(JSON.stringify($scope.selectedMap));
+        $http.get("http://localhost:8080/walmart/rest/getShortestPath", 
+//        $http.get("./rest/getShortestPath", 
+                    { 
+                        params: { 
+                            mapName: $scope.selectedMap.name, 
+                            from: $scope.selectedSourcePath, to: $scope.selectedDestinyPath, 
+                            autonomy: $scope.autonomy, gasPrice: $scope.gasPrice
+                        }
+                    })
+                    .then(function(response) { 
+                        alert(JSON.stringify(response)); 
+                    }, function (error) {
+                    alert('An error has occurred while trying to get the maps. Error: ' + JSON.stringify(error));
+                });
+    };
+    
+    $scope.init();
+});

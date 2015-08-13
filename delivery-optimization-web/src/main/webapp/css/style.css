@@ -43,3 +43,7 @@
 #currentPaths table th, td {
     text-align: center;
 }
+
+#shortestPathForm {
+    margin-top: 15px;
+}

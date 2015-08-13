@@ -1,0 +1,24 @@
+<h3 style="text-align: center;">Choose your destiny</h3>
+<form name="shortestPathForm" id="shortestPathForm" ng-controller="ShortestPathFinderController">
+    <div class="form-group">
+        <label for="mapSelect" >Map Name</label>
+        <select class="form-control" id="mapSelect" ng-options="map.name for map in mapList" ng-model="selectedMap" ng-change="onMapSelect()"></select>
+    </div>
+    <div class="form-group">
+        <label for="sourcePath" >Source Path Name</label>
+        <select class="form-control" id="sourcePath" ng-options="node for node in availableSources" ng-model="selectedSourcePath"></select>
+    </div>
+    <div class="form-group">
+        <label for="sourcePath" >Destiny Name</label>
+        <select class="form-control" id="sourcePath" ng-options="node for node in availableDestinations" ng-model="selectedDestinyPath"></select>
+    </div>
+    <div style="width: 50%; float: left; padding-right: 10px">
+        <label for="autonomy" >Km/l</label>
+        <input id="autonomy" type="number" ng-model="autonomy" class="form-control">
+    </div>
+    <div style="width: 50%; float: right; padding-left: 10px">
+        <label for="gasPrice" >Gas Price</label>
+        <input id="gasPrice" type="text" ng-model="gasPrice" class="form-control">
+    </div>
+    <button style="margin-top: 15px;" type="submit" ng-click="shortestPathForm.$valid && calculateShortestPath()" class="btn btn-success">Get shortest path</button>
+</form>
