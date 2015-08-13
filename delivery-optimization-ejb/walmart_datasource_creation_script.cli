@@ -1,0 +1,10 @@
+if (outcome != success) of /subsystem=datasources/data-source=WalmartDS/:read-resource
+    data-source add --name=WalmartDS \
+                    --jndi-name=java:jboss/datasources/WalmartDS \
+                    --enabled=true \
+                    --connection-url=jdbc:h2:~/h2/walmart_db;AUTO_SERVER=TRUE \
+                    --driver-class=org.h2.Driver \
+                    --driver-name=h2 \
+                    --user-name=sa \
+                    --password=sa
+end-if

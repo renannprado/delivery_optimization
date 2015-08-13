@@ -17,7 +17,7 @@
         <profile>
             <id>datasource-deployment</id>
             <activation>
-                <activeByDefault>false</activeByDefault>
+                <activeByDefault>true</activeByDefault>
             </activation>
             <build>
                 <plugins>
@@ -25,29 +25,17 @@
                         <groupId>org.wildfly.plugins</groupId>
                         <artifactId>wildfly-maven-plugin</artifactId>
                         <executions>
-                            <!-- datasource that will be used by application -->
                             <execution>
                                 <phase>prepare-package</phase>
                                 <goals>
-                                    <goal>add-resource</goal>
+                                    <goal>execute-commands</goal>
                                 </goals>
                                 <configuration>
-                                    <address>subsystem=datasources,data-source=WalmartDS</address>
-                                    <resources>
-                                        <resource>
-                                            <properties>
-                                                <jndi-name>java:jboss/datasources/WalmartDS</jndi-name>
-                                                <enabled>true</enabled>
-                                                <!-- This connection will create the database files under the user's home  -->
-                                                <!-- Since the user that is executing usually have permission in its home folder, it's safe to create this connection -->
-                                                <connection-url>jdbc:h2:~/h2/walmart_db;AUTO_SERVER=TRUE</connection-url>
-                                                <driver-class>org.h2.Driver</driver-class>
-                                                <driver-name>h2</driver-name>
-                                                <user-name>sa</user-name>
-                                                <password>sa</password>
-                                            </properties>
-                                        </resource>
-                                    </resources>
+                                    <execute-commands>
+                                        <scripts>
+                                            <script>${basedir}/walmart_datasource_creation_script.cli</script>
+                                        </scripts>
+                                    </execute-commands>
                                 </configuration>
                             </execution>
                         </executions>
