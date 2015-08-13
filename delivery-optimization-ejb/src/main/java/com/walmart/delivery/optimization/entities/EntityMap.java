@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 import java.util.List;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -56,7 +58,7 @@ public class EntityMap implements Serializable
     @NotNull
     private String name;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "entityMap", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "entityMap", cascade = CascadeType.ALL)
     private List<EntityLogisticsNetwork> logisticsNetwork;
     
     @JsonProperty
@@ -77,6 +79,7 @@ public class EntityMap implements Serializable
         this.name = name.toUpperCase();
     }
 
+    
     public List<EntityLogisticsNetwork> getLogisticsNetwork() {
         return logisticsNetwork;
     }
