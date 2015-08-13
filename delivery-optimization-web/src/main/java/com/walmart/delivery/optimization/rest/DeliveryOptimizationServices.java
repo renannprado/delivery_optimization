@@ -86,4 +86,11 @@ public class DeliveryOptimizationServices implements Serializable
             return new ShortestPathResponse(newStack, totalGasCost);
         }
     }
+    
+    @GET
+    @Path(value = "/getAllMaps")
+    @Produces(value = MediaType.APPLICATION_JSON)
+    public List<EntityMap> getAllMaps() {
+        return entityMapEJB.findAll();
+    }
 }
