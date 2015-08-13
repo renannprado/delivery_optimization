@@ -26,8 +26,8 @@
                 </thead>
                 <tbody>
                     <tr ng-repeat="path in newMap.logisticsNetwork">
-                        <td>{{path.sourceName}}</td>
-                        <td>{{path.destinyName}}</td>
+                        <td>{{path.sourceName | uppercase}}</td>
+                        <td>{{path.destinyName | uppercase}}</td>
                         <td>{{path.distance}}</td>
                     </tr>
                 </tbody>
