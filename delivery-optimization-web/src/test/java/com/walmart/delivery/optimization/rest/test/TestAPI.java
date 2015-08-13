@@ -1,23 +1,20 @@
 package com.walmart.delivery.optimization.rest.test;
 
-import com.walmart.delivery.optimization.beans.AbstractFacade;
-import com.walmart.delivery.optimization.beans.EntityLogisticsNetworkFacade;
 import com.walmart.delivery.optimization.beans.EntityMapFacade;
-import com.walmart.delivery.optimization.config.JacksonConfig;
 import com.walmart.delivery.optimization.entities.EntityLogisticsNetwork;
 import com.walmart.delivery.optimization.entities.EntityMap;
-import com.walmart.delivery.optimization.rest.ApplicationConfig;
 import com.walmart.delivery.optimization.rest.DeliveryOptimizationServices;
-import com.walmart.delivery.optimization.rest.responses.ResponseVertex;
 import com.walmart.delivery.optimization.rest.responses.ShortestPathResponse;
 import java.util.ArrayList;
 import java.util.List;
+import javax.ejb.EJB;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.extension.rest.client.ArquillianResteasyResource;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.junit.InSequence;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -27,53 +24,112 @@ import org.junit.runner.RunWith;
  */
 @RunWith(Arquillian.class)
 public class TestAPI {
-    
-//    @ArquillianResource(value = URL.class)
-//    private URL deploymentURL;
+
+    @EJB
+    private EntityMapFacade mapEjb;
     
     @Deployment
     public static WebArchive createDeployment() {
         
-        JavaArchive jar = ShrinkWrap.create(JavaArchive.class, "delivery-optimization-ejb-test.jar")
-                .addClass(EntityMap.class)
-                .addClass(AbstractFacade.class)
-                .addClass(EntityLogisticsNetwork.class)
-                .addClass(EntityLogisticsNetworkFacade.class)
-                .addClass(EntityMapFacade.class)
-                .addAsResource("test-persistence.xml", "META-INF/persistence.xml");
-
         return ShrinkWrap
                 .create(WebArchive.class, "delivery-optimization-web-test.war")
-//                .addAsLibraries(jar)
-//                .addClasses(JacksonConfig.class)
-//                .addClasses(ApplicationConfig.class)
-//                .addClasses(ShortestPathResponse.class)
-//                .addClasses(ResponseVertex.class)
                 .addPackages(true, "com.walmart")
+                .addPackages(true, "business")
                 .addAsResource("test-persistence.xml", "META-INF/persistence.xml");
-//                .addClasses(DeliveryOptimizationServices.class).addPackages(true, "com.walmart");
         
         //        addPackages(true, "com.project.beans", "com.project.model", "com.project.services")
         //https://github.com/arquillian/arquillian-extension-rest/tree/master/rest-client
     }
     
+    private String testMap1 = "test map";
+    
     @Test
-    public void hu3hu3h3u3uh(@ArquillianResteasyResource DeliveryOptimizationServices customerResource) throws InterruptedException
-    {
-//        Given as;
-//        Thread.sleep(1000 * 30);
-        EntityMap entityMap = new EntityMap();
+    @InSequence(0)
+    public void simpleMapInsertTest() throws Exception 
+    {                
+        EntityMap newMap = new EntityMap();
+        newMap.setName(testMap1);
+
+        // validate that the id is null
+        Assert.assertNull(newMap.getId());
         
-        entityMap.setName("testando123");
-        
+        // the map name should be always converted to upppercase 
+        Assert.assertEquals(newMap.getName(), testMap1.toUpperCase());
+     
         List<EntityLogisticsNetwork> network = new ArrayList<>();
-        network.add(new EntityLogisticsNetwork("a", "b", 312, entityMap));
         
-        entityMap.setLogisticsNetwork(network);
+        network.add(new EntityLogisticsNetwork("rua_w", "rua_x", 10, newMap));
+        network.add(new EntityLogisticsNetwork("rua_x", "rua_y", 5, newMap));
+        network.add(new EntityLogisticsNetwork("rua_y", "rua_z", 30, newMap));
+        network.add(new EntityLogisticsNetwork("rua_w", "rua_a", 20, newMap));
+        network.add(new EntityLogisticsNetwork("rua_a", "rua_z", 10, newMap));
         
-        customerResource.registerLogisticsNetwork(entityMap);
+        newMap.setLogisticsNetwork(network);
         
-        System.out.println(entityMap);
-        System.out.println("brbr");
+        // taking one network to test
+        EntityLogisticsNetwork oneNet = network.get(0);
+        
+        Assert.assertNull(oneNet.getId());
+        // should also be uppercase
+        Assert.assertEquals("RUA_W", oneNet.getSourceName());
+        Assert.assertEquals("RUA_X", oneNet.getDestinyName());
+        assert 10 == oneNet.getDistance();
+        
+        // persist the map
+        mapEjb.create(newMap);
+        
+        // after inserting into the database it should not be null anymore
+        Assert.assertNotNull(newMap.getId());
+        
+        EntityMap find = mapEjb.find(newMap.getId());
+        
+        if (find != null) 
+            testOutput(find.toString());
+        else 
+        {
+            Assert.fail("The map was not found.");
+            return; // putting return here to avoid warning in the below code
+        }
+        
+        Assert.assertNotNull(find.getLogisticsNetwork());
+        Assert.assertEquals(5, find.getLogisticsNetwork().size());
+        
+        // check that all the network paths were persisted
+        for (EntityLogisticsNetwork n : network)
+            Assert.assertNotNull(n.getId());
+    }
+    
+    @Test
+    @InSequence(1)
+    public void getNetworkByNameTest() 
+    {
+        // try to find the map created in the test above
+        List<EntityLogisticsNetwork> network = mapEjb.getNetworkByMapName(testMap1);
+        
+        Assert.assertEquals(5, network.size());
+    }
+    
+    @Test
+    @InSequence(value = 2)
+    public void calculationRequestTest(@ArquillianResteasyResource DeliveryOptimizationServices deliveryServices)
+    {
+        ShortestPathResponse shortestPath = deliveryServices.getShortestPath(testMap1, "rua_w", "rua_z", 5, 3);
+        
+        testOutput(shortestPath.toString());
+        
+        // test that the path is right
+        Assert.assertEquals("RUA_W", shortestPath.getShortestPath().get(0).getVertexName());
+        Assert.assertEquals("RUA_A", shortestPath.getShortestPath().get(1).getVertexName());
+        Assert.assertEquals("RUA_Z", shortestPath.getShortestPath().get(2).getVertexName());
+        Assert.assertEquals("The total cost of this path should be 18.", 18f, shortestPath.getTotalCost(), 0);
+    }
+    
+    public void testOutput(String... strings) {
+        System.out.println("-------------------BEGIN TEST OUTPUT--------------------");
+        System.out.println("--------------------------------------------------------");
+        for (String s : strings)
+            System.out.println(s);
+        System.out.println("--------------------------------------------------------");
+        System.out.println("-------------------END OF TEST OUTPUT-------------------");
     }
 }

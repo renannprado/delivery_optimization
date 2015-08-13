@@ -18,4 +18,9 @@ public class ResponseVertex
     public String getVertexName() {
         return vertexName;
     }
+
+    @Override
+    public String toString() {
+        return "ResponseVertex{" + "vertexName=" + vertexName + '}';
+    }
 }

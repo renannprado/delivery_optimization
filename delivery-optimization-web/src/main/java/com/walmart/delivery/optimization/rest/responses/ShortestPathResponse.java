@@ -24,4 +24,9 @@ public class ShortestPathResponse {
     public float getTotalCost() {
         return totalCost;
     }
+
+    @Override
+    public String toString() {
+        return "ShortestPathResponse{" + "shortestPath=" + shortestPath + ", totalCost=" + totalCost + '}';
+    }
 }
