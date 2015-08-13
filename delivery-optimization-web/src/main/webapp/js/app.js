@@ -116,7 +116,7 @@ deliveryOptmizationApp.controller('ShortestPathFinderController', function($scop
                         params: { 
                             mapName: $scope.selectedMap.name, 
                             from: $scope.selectedSourcePath, to: $scope.selectedDestinyPath, 
-                            autonomy: $scope.autonomy, gasPrice: $scope.gasPrice
+                            autonomy: $scope.autonomy, gasPrice: $scope.gasPrice.replace(',', '.') // try to replace the comma by dot just in case
                         }
                     })
                     .then(function(response) { 
