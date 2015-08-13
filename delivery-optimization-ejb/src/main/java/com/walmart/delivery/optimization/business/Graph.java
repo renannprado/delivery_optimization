@@ -30,6 +30,11 @@ public class Graph
         this.vertexList.putAll(vertices);
     }
     
+    /**
+     * This method creates a graph from a list of <code>EntityLogisticsNetwork</code>
+     * @param network the list of <code>EntityLogisticsNetwork</code>
+     * @return a new graph
+     */
     public static Graph buildGraphFromLogisticsNetwork(List<EntityLogisticsNetwork> network)
     {
         Graph g = new Graph();

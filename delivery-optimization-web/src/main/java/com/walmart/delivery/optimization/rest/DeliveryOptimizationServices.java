@@ -30,6 +30,11 @@ public class DeliveryOptimizationServices implements Serializable
     @EJB
     EntityMapFacade entityMapEJB;    
     
+    /**
+     * Registers a new map
+     * @param newMapRequest
+     * @return 
+     */
     @PUT
     @Path(value = "/addLogisticsNetwork")
     @Produces(value = MediaType.APPLICATION_JSON)
@@ -47,6 +52,16 @@ public class DeliveryOptimizationServices implements Serializable
         return newMapRequest;
     }
     
+    /**
+     * This webservice executes the shortest path algorithm for a given <code>mapName</code>,<code>from</code> and <code>to</code>
+     * After finding the shortest path, it calculates how much gas would it take to drive through this path and return the total cost of the travel
+     * @param mapName
+     * @param from
+     * @param to
+     * @param autonomy
+     * @param gasPrice
+     * @return 
+     */
     @GET
     @Path(value = "/getShortestPath")
     @Produces(value = MediaType.APPLICATION_JSON)
@@ -56,16 +71,21 @@ public class DeliveryOptimizationServices implements Serializable
                                 @QueryParam(value = "autonomy") float autonomy,
                                 @QueryParam(value = "gasPrice") float gasPrice)
     {
+        // search for the network paths based on the map name
         List<EntityLogisticsNetwork> networkByMapName = entityMapEJB.getNetworkByMapName(mapName);
         
+        // build the graph based on the network 
         Graph graph = Graph.buildGraphFromLogisticsNetwork(networkByMapName);
         
+        // run Dijkstra algorithm 
         Stack<Vertex> shortestPathStack = graph.shortestPathAlgorithm(from.toUpperCase(), to.toUpperCase());
         
+        // returns null if the algorithm wasn`t able to determine a shortest path 
         if (shortestPathStack.size() == 0)
             return null;
         else
         {
+            // send information about the shortest path and cost to the caller
             Stack<ResponseVertex> newStack = new Stack<>();
             
             float distance = 0;
@@ -87,6 +107,10 @@ public class DeliveryOptimizationServices implements Serializable
         }
     }
     
+    /**
+     * 
+     * @return all the maps of the database
+     */
     @GET
     @Path(value = "/getAllMaps")
     @Produces(value = MediaType.APPLICATION_JSON)

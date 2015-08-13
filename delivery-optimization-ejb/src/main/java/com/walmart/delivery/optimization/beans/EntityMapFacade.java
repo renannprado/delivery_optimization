@@ -27,7 +27,11 @@ public class EntityMapFacade extends AbstractFacade<EntityMap>
         super(EntityMap.class);
     }
     
-//    @Override
+    /**
+     * 
+     * @param mapName
+     * @return a list of <code>EntityLogisticsNetwork</code> given the map name
+     */
     public List<EntityLogisticsNetwork> getNetworkByMapName(String mapName)
     {
         // search ins't case sensitive
