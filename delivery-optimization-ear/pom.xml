@@ -4,7 +4,7 @@
     <parent>
         <artifactId>delivery-optimization</artifactId>
         <groupId>com.walmart</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.Final</version>
     </parent>
     <groupId>com.walmart</groupId>
     <artifactId>delivery-optimization-ear</artifactId>
